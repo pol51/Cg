@@ -1,0 +1,26 @@
+struct C3E2v_Output {
+	float4 position : POSITION;
+	float4 color    : COLOR;
+	float2 texCoord	: TEXCOORD0;
+};
+
+struct C3E2v_Input {
+	float4 position : POSITION;
+	float4 color	: COLOR;
+	float2 texCoord	: TEXCOORD0;
+};
+
+C3E2v_Output C3E2v_varying(C3E2v_Input IN, uniform float4x4 ModelViewProj)
+{
+	C3E2v_Output OUT;
+
+	OUT.position	= mul(ModelViewProj, IN.position);
+	OUT.color		= IN.color;
+	
+	OUT.color.xy	= 1 / (OUT.position.x / OUT.position.y +
+					  OUT.position.y / OUT.position.x) * 2;
+	
+	OUT.texCoord	= IN.texCoord;
+
+	return OUT;
+}

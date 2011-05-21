@@ -1,0 +1,46 @@
+struct C3E2v_Output {
+	float4 position : POSITION;
+	float4 color    : COLOR;
+	float2 texCoord	: TEXCOORD0;
+};
+
+struct C3E2v_Input {
+	float4 position : POSITION;
+	float4 color	: COLOR;
+	float2 texCoord	: TEXCOORD0;
+};
+
+C3E2v_Output C3E2v_varying(C3E2v_Input IN,
+	uniform float4x4 ModelViewProj,
+	uniform float twisting)
+{
+	C3E2v_Output OUT;
+
+	float4 position = mul(ModelViewProj, IN.position);
+	
+	float angle = twisting * length(position);
+	float cosLength, sinLength;
+	sincos(angle, sinLength, cosLength);
+	
+	OUT.position	= position;
+	OUT.position[0]	= cosLength	* position[0] -
+					  sinLength	* position[1];
+	OUT.position[1]	= sinLength	* position[0] +
+					  cosLength	* position[1];
+	//~ OUT.position[0]	= cosLength	* OUT.position[0] -
+					  //~ sinLength	* OUT.position[1];
+	//~ OUT.position[1]	= sinLength	* OUT.position[0] +
+					  //~ cosLength	* OUT.position[1];
+	//~ OUT.position[0]	= cosLength	* OUT.position[0] -
+					  //~ sinLength	* OUT.position[1];
+	
+	sincos(angle * 10, sinLength, cosLength);
+	OUT.color		= IN.color * abs(sinLength + cosLength);
+	
+	OUT.color.xy	= 1 / (OUT.position.x / OUT.position.y +
+					  OUT.position.y / OUT.position.x) * 2;
+	
+	OUT.texCoord	= IN.texCoord;
+
+	return OUT;
+}

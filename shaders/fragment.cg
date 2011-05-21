@@ -1,0 +1,12 @@
+struct C2E2f_Output {
+  float4 color : COLOR;
+};
+
+C2E2f_Output C2E2f_passthrough(
+	float2 texCoord : TEXCOORD0, uniform sampler2D decal)
+{
+  C2E2f_Output OUT;
+  OUT.color = tex2D(decal, texCoord);
+  OUT.color.x = OUT.color.yx;
+  return OUT;
+}

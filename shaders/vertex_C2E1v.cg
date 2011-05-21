@@ -1,0 +1,18 @@
+struct C2E1v_Output {
+  float4 position : POSITION;
+  float4 color    : COLOR;
+};
+
+struct C2E1v_Input {
+  float4 position : POSITION;
+};
+
+C2E1v_Output C2E1v_green(C2E1v_Input IN)
+{
+  C2E1v_Output OUT;
+
+  OUT.position = IN.position;
+  OUT.color    = float4(0, 1, 0, 1);  // RGBA green
+
+  return OUT;
+}
